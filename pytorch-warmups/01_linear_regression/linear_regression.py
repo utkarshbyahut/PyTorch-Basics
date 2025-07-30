@@ -1,6 +1,14 @@
 import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
+import os
+
+# Image Saving Logic : Nothing Serious
+def save_plot_relative_to_script(filename):
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    output_path = os.path.join(script_dir, filename)
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    plt.savefig(output_path)
 
 # 1. Create synthetic dataset: y = 3x + 1 + noise
 torch.manual_seed(42)
@@ -47,5 +55,8 @@ plt.title("Linear Regression with PyTorch")
 plt.xlabel("X")
 plt.ylabel("y")
 plt.grid(True)
-plt.savefig("./generated_images/prediction_plot.png")
+
+# Using relative path to save the plot
+save_plot_relative_to_script("generated_images/prediction_plot.png")
+
 plt.show()

@@ -26,5 +26,6 @@ python linear_regression.py
 
 pytorch-warmups/
 ├── 01_linear_regression/
+│   ├── generated_images
 │   ├── linear_regression.py
 │   └── README.md
