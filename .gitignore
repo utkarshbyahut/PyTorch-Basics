@@ -1,0 +1,5 @@
+# Ignore model checkpoints and large files
+models/**/*.pt
+models/**/*.safetensors
+models/**/optimizer.pt
+*.bfg-report
