@@ -1,23 +1,23 @@
 import torch
 import torchaudio
 from transformers import Wav2Vec2ForSequenceClassification, Wav2Vec2FeatureExtractor
+import soundfile as sf
 
-# Replace with your Hugging Face repo
-MODEL_REPO = "cactusZen/wav2vec2-emotion"
+# Your Hugging Face repo
+MODEL_REPO = "cactusZen/wav2vec2-hf"
 
-# Load model + feature extractor from Hugging Face
+# Load model + feature extractor
+print(f"Loading model from Hugging Face repo: {MODEL_REPO}")
 model = Wav2Vec2ForSequenceClassification.from_pretrained(MODEL_REPO)
 extractor = Wav2Vec2FeatureExtractor.from_pretrained(MODEL_REPO)
 
 model.eval()
 
-# Inference function
-def predict(audio_path):
-    # Load audio
-    waveform, sample_rate = torchaudio.load(audio_path)
-    waveform = waveform.squeeze()
 
-    # Resample to 16kHz if needed
+
+def predict(audio_path):
+    waveform, sample_rate = sf.read(audio_path)
+    waveform = torch.tensor(waveform, dtype=torch.float32)
     if sample_rate != 16000:
         resampler = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=16000)
         waveform = resampler(waveform)
@@ -39,8 +39,9 @@ def predict(audio_path):
     label = model.config.id2label[predicted_id]
     return label
 
-# Example
 if __name__ == "__main__":
-    test_audio = "test.wav"  # put a sample file here
+    # Pick any RAVDESS file from your dataset
+    test_audio = "/Users/macintosh-computadora/Visual Studio Code/wav2vec-hf-workspace/Pytorch-Basics/data/ravdess/Actor_01/03-01-01-01-01-01-01.wav"
+
     prediction = predict(test_audio)
-    print(f"Predicted emotion: {prediction}")
+    print(f"Predicted emotion for {test_audio}: {prediction}")
